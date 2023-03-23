@@ -1,11 +1,12 @@
 import React from 'react'
 import Header from '@/components/home/Header'
-import Main from '@/components/home/Main'
-export default function Home() {
+import RaceTrack from '@/components/track/RaceTrack'
+
+export default function Track() {
   return (
     <div className='pt-[80px] md:pt-[68px]'>
-      <Header/>
-      <Main/>
+        <Header/>
+        <RaceTrack/>
     </div>
   )
 }
