@@ -16,6 +16,16 @@ export const currentlyActive=[
 export const numArray =[100,200,400]
 
 
-export const TrackListDemo =[
-     {margin:0},{margin:30},{margin:1280},{margin:1050}
+export const TrackListDemo ={
+     tracks: [{margin:1940,speed:0,attempts:[]},{margin:0,speed:0,attempts:[]}],
+     tracklane:1,
+     length:2000
+
+}
+
+export const RacestatDemo=[
+     {image:Player,speed:26,distance:900,username:"TesterUser03"},
+     {image:Player,speed:24,distance:800,username:"TesterUser01"},
+     {image:Player,speed:26,distance:1300,username:"TesterUser02"}
 ]
+//,{margin:900},{margin:850}

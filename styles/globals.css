@@ -34,4 +34,8 @@
 .lightoverlay{
   @apply before:inset-0 before:bg-gradient-to-b before:from-main/30  before:to-main before:z-20 before:absolute
 }
+.button-style{
+  @apply shadow-md shadow-sec h-[70px] w-[70px] md:h-[80px] md:w-[80px]  rounded-full mx-8 md:mx-12 lg:mx-20  relative overflow-hidden before:absolute before:h-[14px] before:opacity-80 before:left-[5px] before:w-full before:top-2 before:bg-main before:rounded-full before:blur-[13px] outline outline-offset-2 outline-1
+}
+
 @tailwind utilities;

@@ -18,3 +18,11 @@ export function getCarImage(num:number){
                return Redcar
      }
 }
+
+export function ArrayConverter(num:number){
+     const array =[]
+     for (let i = 100;i<num;i += 100){
+          array.push(i)
+     }
+     return array
+}
