@@ -1,24 +1,29 @@
-import React from 'react'
-import {useState} from "react"
+import React,{useEffect, useRef} from 'react'
 import { getCarImage,ArrayConverter } from '@/utils/helper'
 import Image from 'next/image'
 import {BsFlagFill} from "react-icons/bs"
-import { useAppDispatch,useAppSelector } from '@/hooks/reduxhooks'
+import { useTrackScroll } from '@/hooks/useTrackScroll'
+import { useBotcar } from '@/hooks/useBotcar'
 
 
 interface TrackProps {
     length: number
     tracks:{margin: number,speed:number,}[],
-    tracklane:number
-
+    tracklane:number,
+    position:number
 }
 
-export default function Track({length, tracks,tracklane}: TrackProps) {
+
+
+export default function Track({length, tracks,tracklane,position}: TrackProps) {
   const numbers = ArrayConverter(length)
-  const {distance,streak,level} = useAppSelector((state=>state.race))
+  const trackref = useRef<HTMLDivElement>(null)
+  const track = useTrackScroll(trackref,position)
+  const botcar = useBotcar(length)
+
 
   return (
-    <div className='overflow-auto rounded-md bg-main shadow-md px-4 pb-4 pr-16'>
+    <div className='overflow-auto rounded-md bg-main shadow-md px-4 pb-4 pr-16' ref={trackref}>
       <div className='flex mb-2'>
         {numbers.map((item,key)=>{
           const islast = key === numbers.length 
@@ -31,11 +36,11 @@ export default function Track({length, tracks,tracklane}: TrackProps) {
           )
         })}
       </div>
-      <div style={{width:length}}>
+      <div style={{width:length + 80}}>
         {tracks.map((item,key)=>{
           return(
             <div className='w-full relative h-[60px] border-b-2 border-red-500 border-dashed flex items-end' key={key}>
-              <div style={{marginLeft:item.margin}} className="relative">{<Image src={getCarImage(key)} alt="" className='h-[40px] w-[80px] object-contain'/>}
+              <div style={{marginLeft:item.margin}} className="relative transition-all duration-100">{<Image src={getCarImage(key)} alt="" className='h-[40px] w-[80px] object-contain'/>}
               <span className='absolute -left-4 text-sm text-lightsec -top-3 font-semibold'>{item.speed}m/s</span>
               </div>
               <span className='absolute text-2xl -right-5 text-sec'><BsFlagFill/></span>

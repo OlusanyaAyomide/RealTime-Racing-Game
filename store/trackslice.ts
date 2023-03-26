@@ -4,7 +4,8 @@ import { RootState } from "./store";
 
 export interface trackSliceInterface{
     tracklane:number,
-    length:number
+    length:number,
+    position:number
     tracks:{margin:number,
     speed:number,
     attempts:{
@@ -13,19 +14,17 @@ export interface trackSliceInterface{
     }[]
     }[]
 }
-interface filterinterface{
-    time:number,
-    acceleration:number  
-} 
 interface payloadinterface{
     total:number,
     current:number,
     track:number
+    scroll?:boolean
 }
 const initalState:trackSliceInterface={
     tracklane:1,
     length:0,
-    tracks:[]
+    tracks:[],
+    position:0
 }
 
 export const trackSlice = createSlice({
@@ -46,12 +45,15 @@ export const trackSlice = createSlice({
                 }
             })
             let numbers = 0
-            console.log(state.tracks[index].attempts)
-            console.log(filteredArray[0].acceleration)
             for (let num of filteredArray){
                 numbers += num.acceleration
             }
             state.tracks[index].speed = Math.round(numbers/filteredArray.length)
+            if (action.payload.scroll){
+                if(action.payload.total > 50 && action.payload.total < (state.length - 50)){
+                    state.position = action.payload.total - 50
+                }
+            }
         },
         setTrack(state,action:PayloadAction<trackSliceInterface>){
             state.length = action.payload.length
