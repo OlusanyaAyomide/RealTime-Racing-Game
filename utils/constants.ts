@@ -17,10 +17,9 @@ export const numArray =[100,200,400]
 
 
 export const TrackListDemo ={
-     tracks: [{margin:0,speed:0,attempts:[]},{margin:0,speed:0,attempts:[]}],
-     tracklane:1,
-     length:2000,
-     position:0
+     tracks: [{margin:0,speed:0,attempts:[],trackUser:"TesterUser 01",image:Player},{margin:0,speed:0,attempts:[],image:Player,trackUser:"TesterUser 01",}],
+     tracklane:0,
+     length:100,
 
 }
 

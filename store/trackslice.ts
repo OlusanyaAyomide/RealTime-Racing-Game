@@ -1,12 +1,27 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from "./store";
+import { StaticImageData } from "next/image";
+import Player from "../public/images/Player01.png"
+
 
 export interface trackSliceInterface{
     tracklane:number,
+    hasStarted:boolean
+    hasFinished:boolean
     length:number,
-    position:number
+    position:number,
+    botRacing:boolean,
+    stats:{
+        image:StaticImageData,
+        name:string,
+        speed:number,
+        raceTime:number,
+    }[]
+    retrying:boolean,
     tracks:{margin:number,
+    image:StaticImageData
+    trackUser:string
     speed:number,
     attempts:{
         time:number,
@@ -14,17 +29,37 @@ export interface trackSliceInterface{
     }[]
     }[]
 }
+interface setTrackInterface{
+    tracklane:number,
+    length:number,
+    tracks:{margin:number,
+        image:StaticImageData
+        trackUser:string
+        speed:number,
+        attempts:{
+            time:number,
+            acceleration:number
+        }[]
+    }[]
+}
 interface payloadinterface{
     total:number,
     current:number,
     track:number
-    scroll?:boolean
+    scroll?:boolean,
+    image:StaticImageData,
+    name:string
 }
 const initalState:trackSliceInterface={
     tracklane:1,
     length:0,
     tracks:[],
-    position:0
+    stats:[],
+    position:0,
+    botRacing:false,
+    retrying:true,
+    hasStarted:false,
+    hasFinished:false
 }
 
 export const trackSlice = createSlice({
@@ -33,6 +68,25 @@ export const trackSlice = createSlice({
     reducers:{
         moveTrack(state,action:PayloadAction<payloadinterface>){
             const index = action.payload.track
+            if(action.payload.total > state.length){
+                console.log("Hereee")
+                console.log(state.length)
+                state.tracks[index].margin = state.length
+                const timeSpent = Math.round((Date.now() - state.tracks[index].attempts[0].time)/1000)
+                state.stats=[...state.stats,{
+                    image:action.payload.image,
+                    name:action.payload.name,
+                    raceTime:timeSpent,
+                    speed:Math.round(state.length/timeSpent)
+                    
+                }]
+                if (action.payload.track === state.tracklane){
+                    state.hasStarted = false
+                    state.hasFinished = true 
+                }
+              
+                return
+            }
             state.tracks[index].margin = action.payload.total
             state.tracks[index].attempts =[
                 ...state.tracks[index].attempts,{
@@ -55,11 +109,29 @@ export const trackSlice = createSlice({
                 }
             }
         },
-        setTrack(state,action:PayloadAction<trackSliceInterface>){
+        setTrack(state,action:PayloadAction<setTrackInterface>){
             state.length = action.payload.length
             state.tracklane = action.payload.tracklane
             state.tracks = action.payload.tracks
-        }       
+            state.hasStarted = false
+            state.hasFinished = false
+        },
+        startrace(state){
+            state.hasStarted = true;
+            state.retrying = false
+            state.botRacing = true
+        },
+        saveBotStats(state,action:PayloadAction<payloadinterface>){
+            const index = action.payload.track
+            const timeSpent = Math.round((Date.now() - state.tracks[index].attempts[0].time)/1000)
+            state.stats=[...state.stats,{
+                image:action.payload.image,
+                name:action.payload.name,
+                raceTime:timeSpent,
+                speed:Math.round(state.length/timeSpent)            
+            }]
+            state.botRacing = false
+        }     
     }
 })
 

@@ -20,19 +20,24 @@ export const raceSlice = createSlice({
     initialState:initalState,
     reducers:{
         moveCart(state){
-            console.log(state.distance)
-            if(state.level === 5){
+            if(state.level === 6){
                 state.distance += (state.level + 1)*5
                 return
             }
-            if(state.streak === 10){
+            if(state.streak === 5){
                 state.level = state.level + 1
                 state.streak = 0
                 state.distance += (state.level + 1)*10
                 return  
             }
             state.streak = state.streak + 1
-            state.distance += (state.level + 1) * 5
+            if (state.level === 0){
+                state.distance += 2
+            }
+            else{
+              state.distance += (state.level + 1) * 5
+            }
+         
         },
         decreaseCart(state){
             state.streak = 0

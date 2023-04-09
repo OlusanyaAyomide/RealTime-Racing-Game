@@ -7,10 +7,12 @@ import ButtonClick from './ButtonClick'
 import { raceActions } from '@/store/raceSlice'
 import { trackActions } from '@/store/trackslice'
 import CountDown from './CountDown'
-
+import RaceStats from './RaceStats'
+import { RacestatDemo } from '@/utils/constants'
+import { Resources } from '@/public/images/exporter'
 
 export default function PractiseTrack() {
-  const {tracklane,tracks,length,position} = useAppSelector(state=>state.track)
+  const {tracklane,tracks,retrying,length,position,hasFinished,hasStarted,stats} = useAppSelector(state=>state.track)
   const dispatch = useAppDispatch()
   const {distance,level} = useAppSelector((state=>state.race))
   return (
@@ -20,18 +22,20 @@ export default function PractiseTrack() {
       <div className='cont relative z-20'>
         <Track length={length} tracks={tracks} tracklane={tracklane} position={position}/>
         </div>
-        <CountDown countdown={()=>{console.log("finished")}}/>
+        {!hasStarted && retrying &&  <CountDown countdown={()=>{
+          setTimeout(()=>{dispatch(trackActions.startrace())},1000)
+       }}/>}
       </div>
-      <ButtonClick 
+      {hasStarted && <ButtonClick 
       speedUp={()=>{dispatch(raceActions.moveCart())}} 
       decreaseSpeed={()=>{dispatch(raceActions.decreaseCart())}}
       updatetrack={()=>{
         dispatch(trackActions.moveTrack({
-          track:0,total:distance,current:level+1,scroll:true
+          track:0,total:distance,current:level+1,scroll:true,image:Resources.Player01,name:"Tester User"
         }))
       }}
-      />
-      {/* <RaceStats tracks={RacestatDemo}/> */}
+      />}
+      {hasFinished && <RaceStats tracks={stats}/>}
     </div>
   )
 }

@@ -13,7 +13,7 @@ export default function Active() {
             {currentlyActive.map((item,key)=>{
                 return(
                     <div key={key}>
-                        <div className='shadow-sec py-4 px-4 mx-2 md:mx-0 md:mb-4 shadow-md w-[250px] md:w-full border-runnerred border-r-2 md:border-r-0 md:border-b rounded-md bg-main'>
+                        <div className='shadow-sec py-4 px-4 mx-2 md:mx-0 md:mb-4 shadow-md w-[230px]  sm:w-[250px] md:w-full border-runnerred border-r-2 md:border-r-0 md:border-b rounded-md bg-main'>
                           <div className='md:hidden h-[60px] w-[60px] mx-auto mb-3 rounded-full overflow-hidden'>
                             <Image src={item.image} alt="" className='object-contain h-full w-full'/>    
                           </div>
